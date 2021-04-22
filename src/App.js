@@ -22,6 +22,7 @@ class App extends React.Component {
     this.addtoken = this.addtoken.bind(this);
     this.changeids = this.changeids.bind(this);
     this.changeDance = this.changeDance.bind(this);
+    this.postDancers = this.postDancers.bind(this);
   }
   addemail(email){
     this.setState({email:email})
@@ -29,11 +30,12 @@ class App extends React.Component {
   addtoken(token){
     this.setState({token:token})
   }
+
   async changeids(scores){
     this.setState({scores:scores})
     console.log(this.state.email)
     var url = process.env.REACT_APP_BACKEND_URL + '/setDancers/' + this.state.currentDance ;
-    const response = await axios.post(url, {judge: this.state.email, vote:this.state.scores}).then((response) => {
+    const response = await axios.post(url, {token: this.state.token, vote:scores}).then((response) => {
       console.log(response);
     }, (error) => {
       console.log(error);
@@ -42,26 +44,65 @@ class App extends React.Component {
   }
 
   async changeDance(){
-    var url = process.env.REACT_APP_BACKEND_URL + '/getCurrent'
-    const response = await axios.get(url);
-    if(this.state.currentDance != response.data)
+    var url = process.env.REACT_APP_BACKEND_URL + '/postCurrent'
+    const response = await axios.post(url, this.state.token).then((response) =>
     {
-      window.location.reload();
-    }
+      if(this.state.currentDance != response.data)
+        {
+          window.location.reload();
+        }
+    });
   }
 
-  async componentDidMount() {
-    // Get request using axios with async/await
-    var url = process.env.REACT_APP_BACKEND_URL + '/getDancers'
-    const response = await axios.get(url);
-    this.setState({ 
-      ids: response.data.dancers[0],
-      currentDance:response.data.currentDance});
-    console.log(this.state.ids);
-    console.log(this.state.currentDance);
-    setInterval(this.changeDance, 15000);
-}
+  // async componentDidMount() {
+  //   // Get request using axios with async/await
+  //   var url = process.env.REACT_APP_BACKEND_URL + '/getDancers';
+  //   const response = await axios.get(url).then((response) =>
+  //   {
+  //     if (response){
+  //       this.setState({ 
+  //         ids: response.data.dancers[0],
+  //         currentDance:response.data.currentDance});
+  //       console.log(this.state.ids);
+  //       console.log(this.state.currentDance);
+  //       setInterval(this.changeDance, 30000);
+  //     }
+  //   });
+  // }
 
+  async postDancers() {
+    // Get request using axios with async/await
+    var url = process.env.REACT_APP_BACKEND_URL + '/postDancers';
+    var data = this.state.token;
+    const response = await axios.post(url,data).then((response) =>
+    {
+      if (response != null){
+        this.setState({ 
+          ids: response.data.dancers[0],
+          currentDance:response.data.currentDance});
+        console.log(this.state.ids);
+        console.log(this.state.currentDance);
+        setInterval(this.changeDance, 15000);
+      }
+    });
+  }
+
+  // async componentDidUpdate(){
+  //       // Get request using axios with async/await
+  //       var url = process.env.REACT_APP_BACKEND_URL + '/postDancers';
+  //       var data = {token: this.state.token};
+  //       const response = await axios.post(url,data).then((response) =>
+  //       {
+  //         if (response != null){
+  //           this.setState({ 
+  //             ids: response.data.dancers[0],
+  //             currentDance:response.data.currentDance});
+  //           console.log(this.state.ids);
+  //           console.log(this.state.currentDance);
+  //           setInterval(this.changeDance, 15000);
+  //         }
+  //       });
+  // }
   
   render(){
     
@@ -83,7 +124,7 @@ class App extends React.Component {
               <Typography variant='h6'>
               {this.state.email === '' ? 'Logged Out': 'Logged in as: ' + this.state.email}
               </Typography>
-              <Loginhooks addemail={this.addemail} addtoken={this.addtoken}/>
+              <Loginhooks addemail={this.addemail} addtoken={this.addtoken} postDancers={this.postDancers}/>
               <Logouthooks addemail={this.addemail} addtoken={this.addtoken} />
               </Drawer>
 

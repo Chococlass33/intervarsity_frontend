@@ -23,6 +23,8 @@ class Movinglist extends React.Component{
             }
         })
         
+        test.changeids(sort.toArray());
+        
     }
 
 

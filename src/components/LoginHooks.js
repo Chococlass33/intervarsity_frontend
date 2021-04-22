@@ -5,13 +5,13 @@ import { useGoogleLogin } from 'react-google-login';
 import { refreshTokenSetup } from '../utils/refreshToken';
 
 const clientId =
-  '707788443358-u05p46nssla3l8tmn58tpo9r5sommgks.apps.googleusercontent.com';
-
+  '997049016403-mb6dm5lhvbsavad5nlcism3ocnhn5uah.apps.googleusercontent.com';
 function LoginHooks(props) {
   const onSuccess = (res) => {
     console.log('Login Success: currentUser:', res);
     props.addemail(res.profileObj.email);
-    props.addtoken(res.accessToken);
+    props.addtoken(res.tokenId);
+    props.postDancers();
     refreshTokenSetup(res);
   };
 
@@ -27,7 +27,7 @@ function LoginHooks(props) {
     onFailure,
     clientId,
     isSignedIn: true,
-    accessType: 'offline',
+    accessType: 'online',
     // responseType: 'code',
     // prompt: 'consent',
   });

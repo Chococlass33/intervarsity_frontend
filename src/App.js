@@ -77,12 +77,14 @@ class App extends React.Component {
     await axios.post(url,data).then((response) =>
     {
       if (response != null){
-        this.setState({ 
-          ids: response.data.dancers[0],
-          currentDance:response.data.currentDance});
-        console.log(this.state.ids);
-        console.log(this.state.currentDance);
-        setInterval(this.changeDance, 15000);
+        if(response.data.dancers != null){
+          this.setState({ 
+            ids: response.data.dancers[0],
+            currentDance:response.data.currentDance});
+          console.log(this.state.ids);
+          console.log(this.state.currentDance);
+          setInterval(this.changeDance, 15000);
+        }
       }
     });
   }
@@ -138,6 +140,7 @@ class App extends React.Component {
                       </Typography> 
                       <Typography variant='h6'>
                         {this.state.email === '' ? 'Please log in to begin': ''}
+                        {this.state.email !== '' && this.state.currentDance === '' ? 'Please ensure you are logged in as the correct judge account.': ''}
                       </Typography>
                     </Paper>
                   </Grid>

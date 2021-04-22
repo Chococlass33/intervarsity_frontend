@@ -131,7 +131,7 @@ class App extends React.Component {
               </Drawer>
 
 
-
+              <div style={{ padding: 8 }}>
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
                     <Paper>
@@ -152,6 +152,7 @@ class App extends React.Component {
                   </Box>
                   </Grid>
                 </Grid>
+              </div>
             </header>
         </div>
       </React.Fragment>

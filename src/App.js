@@ -35,7 +35,7 @@ class App extends React.Component {
     this.setState({scores:scores})
     console.log(this.state.email)
     var url = process.env.REACT_APP_BACKEND_URL + '/setDancers/' + this.state.currentDance ;
-    const response = await axios.post(url, {token: this.state.token, vote:scores}).then((response) => {
+    await axios.post(url, {token: this.state.token, vote:scores}).then((response) => {
       console.log(response);
     }, (error) => {
       console.log(error);
@@ -45,9 +45,9 @@ class App extends React.Component {
 
   async changeDance(){
     var url = process.env.REACT_APP_BACKEND_URL + '/postCurrent'
-    const response = await axios.post(url, this.state.token).then((response) =>
+    await axios.post(url, this.state.token).then((response) =>
     {
-      if(this.state.currentDance != response.data)
+      if(this.state.currentDance !== response.data)
         {
           window.location.reload();
         }
@@ -74,7 +74,7 @@ class App extends React.Component {
     // Get request using axios with async/await
     var url = process.env.REACT_APP_BACKEND_URL + '/postDancers';
     var data = this.state.token;
-    const response = await axios.post(url,data).then((response) =>
+    await axios.post(url,data).then((response) =>
     {
       if (response != null){
         this.setState({ 
